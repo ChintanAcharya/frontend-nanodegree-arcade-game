@@ -74,6 +74,7 @@ Player.prototype.update = function() {
         {
             //collision
             this.reset();
+            this.resetScore();
         }
     }
 };
@@ -120,11 +121,14 @@ Player.prototype.moveToLoc = function (x, y) {
 };
 
 Player.prototype.reset = function() {
-    this.score = 0;
     this.x = locations[2][5][0];
     this.y = locations[2][5][1];
     this.gridX = 2;
     this.gridY = 5;
+};
+
+Player.prototype.resetScore = function () {
+    this.score = 0;
 };
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
