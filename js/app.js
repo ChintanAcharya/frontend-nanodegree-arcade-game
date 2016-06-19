@@ -14,7 +14,7 @@ var Enemy = function(x, y, speed) {
     // we've provided one for you to get started
     this.x = x;
     this.y = y;
-    if (speed == undefined)
+    if (speed === undefined)
         this.speed = Math.random() * 150 + 50;
     else
         this.speed = speed;
@@ -48,14 +48,21 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 var Player = function(x, y) {
-    this.x = x;
-    this.y = y;
+    this.x = locations[x][y][0];
+    this.y = locations[x][y][1];
     //TODO: add row and column identifiers
+    this.gridX = x;
+    this.gridY = y;
     this.sprite = 'images/char-boy.png';
 };
 
 Player.prototype.update = function() {
     //TODO: Improve collision detection
+
+    if ( this.y < 60 ) {
+        this.reset();
+    }
+
     for (var i in allEnemies) {
         var enemyLocX = allEnemies[i].x;
         var enemyLocY = allEnemies[i].y;
@@ -64,23 +71,58 @@ Player.prototype.update = function() {
              ( enemyLocY === this.y ) )
         {
             //collision
-            alert("Collision with enemy" + i);
+            this.reset();
         }
     }
-    //TODO: Check if player has reached water
-}
+};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 Player.prototype.handleInput = function(keyCode) {
-    //TODO
-}
+    var currentX = this.gridX;
+    var currentY = this.gridY;
+    var newX = currentX;
+    var newY = currentY;
+    switch (keyCode) {
+        case "left":
+            newX = currentX - 1;
+            break;
+
+        case "up":
+            newY = currentY - 1;
+            break;
+
+        case "right":
+            newX = currentX + 1;
+            break;
+
+        case "down":
+            newY = currentY + 1;
+            break;
+    }
+    this.moveToLoc(newX, newY);
+};
+
+Player.prototype.moveToLoc = function (x, y) {
+    if (x < 0 || x > 4 || y < 0 || y > 5) {
+        this.reset();
+    }
+    else {
+        this.x = locations[x][y][0];
+        this.y = locations[x][y][1];
+        this.gridX = x;
+        this.gridY = y;
+    }
+};
 
 Player.prototype.reset = function() {
-    //TODO
-}
+    this.x = locations[2][5][0];
+    this.y = locations[2][5][1];
+    this.gridX = 2;
+    this.gridY = 5;
+};
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -90,7 +132,7 @@ allEnemies = [
     new Enemy(600 * Math.random(), 230),
     new Enemy(600 * Math.random(), 315)
 ];
-player = new Player(locations[3][3][0], locations[3][3][1]);
+player = new Player(2, 5);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
