@@ -15,7 +15,7 @@ var Enemy = function(x, y, speed) {
     this.x = x;
     this.y = y;
     if (speed === undefined)
-        this.speed = Math.random() * 150 + 50;
+        this.speed = Math.random() * 200 + 100;
     else
         this.speed = speed;
     // The image/sprite for our enemies, this uses
@@ -33,7 +33,7 @@ Enemy.prototype.update = function(dt) {
     if (this.x > rightBound)
     {
         this.x = (Math.random() * 100 + 50) * -1;
-        this.speed = Math.random() * 150 + 50;
+        this.speed = Math.random() * 200 + 100;
     }
     this.x += dt * this.speed;
 };
@@ -53,6 +53,7 @@ var Player = function(x, y) {
     //TODO: add row and column identifiers
     this.gridX = x;
     this.gridY = y;
+    this.score = 0;
     this.sprite = 'images/char-boy.png';
 };
 
@@ -61,6 +62,7 @@ Player.prototype.update = function() {
 
     if ( this.y < 60 ) {
         this.reset();
+        this.score++;
     }
 
     for (var i in allEnemies) {
@@ -106,7 +108,7 @@ Player.prototype.handleInput = function(keyCode) {
 };
 
 Player.prototype.moveToLoc = function (x, y) {
-    if (x < 0 || x > 4 || y < 0 || y > 5) {
+    if (x < 0 || x > 4 || y > 5) {
         this.reset();
     }
     else {
@@ -118,6 +120,7 @@ Player.prototype.moveToLoc = function (x, y) {
 };
 
 Player.prototype.reset = function() {
+    this.score = 0;
     this.x = locations[2][5][0];
     this.y = locations[2][5][1];
     this.gridX = 2;
